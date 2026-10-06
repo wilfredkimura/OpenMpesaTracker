@@ -38,14 +38,14 @@ This roadmap tracks all implementation phases, subphases, testing requirements, 
   - `git commit -m "feat(domain): define transaction models and enums"`
 
 ### Subphase 2.2: Deterministic MpesaEngineParser
-- [ ] Implement `MpesaEngineParser` with pre-compiled `java.util.regex.Pattern` singletons.
-- [ ] Implement fast O(1) guard check for `"Confirmed"` token and 10-character prefix.
-- [ ] Support the 5 verified 2026 blueprints (Paybill, Buy Goods, P2P Outbound, Pochi, P2P Inbound).
-- [ ] Extract auxiliary balance and transaction fees.
-- [ ] **Unit Tests**:
-  - [ ] Comprehensive unit test suite with 15+ real-world anonymized M-Pesa SMS fixtures.
-  - [ ] Test edge cases: amounts with commas, missing optional fees, masked phones, omitted phones in Pochi.
-- [ ] **Commit Hook**:
+- [x] Implement `MpesaEngineParser` with pre-compiled `java.util.regex.Pattern` singletons.
+- [x] Implement fast O(1) guard check for `"Confirmed"` token and 10-character prefix.
+- [x] Support the 5 verified 2026 blueprints (Paybill, Buy Goods, P2P Outbound, Pochi, P2P Inbound).
+- [x] Extract auxiliary balance and transaction fees.
+- [x] **Unit Tests**:
+  - [x] Comprehensive unit test suite with 18 real-world anonymized M-Pesa SMS fixtures (Passed with 100% success).
+  - [x] Test edge cases: amounts with commas, missing optional fees, masked phones, omitted phones in Pochi (Passed with 100% success).
+- [x] **Commit Hook**:
   - `git commit -m "feat(engine): implement battery-efficient regex parsing engine"`
 
 ---
