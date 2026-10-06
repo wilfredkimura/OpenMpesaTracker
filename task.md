@@ -29,12 +29,12 @@ This roadmap tracks all implementation phases, subphases, testing requirements, 
 ## Phase 2: Domain Models & Regex Parsing Engine
 
 ### Subphase 2.1: Transaction Entity & Enums
-- [ ] Define `TransactionType` (PayBill, Buy Goods, Send Money Outbound, Pochi, Inbound).
-- [ ] Define `TransactionDirection` (Inbound, Outbound).
-- [ ] Define `MpesaTransactionEntity` with `@PrimaryKey val code: String` (10-char body code).
-- [ ] **Unit Tests**:
-  - [ ] Entity instantiation, data integrity, and direction mapping tests.
-- [ ] **Commit Hook**:
+- [x] Define `TransactionType` (PayBill, Buy Goods, Send Money Outbound, Pochi, Inbound).
+- [x] Define `TransactionDirection` (Inbound, Outbound).
+- [x] Define `MpesaTransactionEntity` with `@PrimaryKey val code: String` (10-char body code).
+- [x] **Unit Tests**:
+  - [x] Entity instantiation, data integrity, and direction mapping tests (Passed with 100% success).
+- [x] **Commit Hook**:
   - `git commit -m "feat(domain): define transaction models and enums"`
 
 ### Subphase 2.2: Deterministic MpesaEngineParser
