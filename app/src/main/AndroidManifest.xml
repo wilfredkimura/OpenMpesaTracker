@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  OpenMpesaTracker Android Manifest
+  Privacy note: This application requests NO INTERNET permission.
+  All transaction processing, parsing, storage, and reporting remain 100% on-device.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Permission required to read historical M-Pesa SMS messages from the system inbox -->
+    <uses-permission android:name="android.permission.READ_SMS" />
+
+    <!-- Permission required to detect incoming M-Pesa transaction SMS messages in real-time -->
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+
+    <application
+        android:name=".MpesaApplication"
+        android:allowBackup="false"
+        android:icon="@android:drawable/sym_def_app_icon"
+        android:label="@string/app_name"
+        android:roundIcon="@android:drawable/sym_def_app_icon"
+        android:supportsRtl="true"
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
+
+        <!-- Main UI entry point -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.Material.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--
+          BroadcastReceiver listening for incoming SMS messages.
+          When a new text arrives, it checks if the sender is strictly "MPESA"
+          and parses the confirmation text immediately.
+        -->
+        <receiver
+            android:name=".receiver.MpesaReceiver"
+            android:exported="true"
+            android:permission="android.permission.BROADCAST_SMS">
+            <intent-filter android:priority="999">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <!--
+          FileProvider used to securely share generated CSV and PDF financial reports
+          via the Android system share sheet without granting external storage permissions.
+        -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+    </application>
+
+</manifest>

@@ -9,11 +9,11 @@ This roadmap tracks all implementation phases, subphases, testing requirements, 
 ## Phase 1: Project Scaffolding & Setup
 
 ### Subphase 1.1: Gradle Build Configuration & App Manifest
-- [ ] Configure `settings.gradle.kts` and `app/build.gradle.kts` (Compose, Room, Coroutines).
-- [ ] Configure `AndroidManifest.xml` with `READ_SMS`, `RECEIVE_SMS`, and receiver/provider declarations.
-- [ ] **Unit Tests**:
-  - [ ] Build script validation and dependency resolution test.
-- [ ] **Commit Hook**:
+- [x] Configure `settings.gradle.kts` and `app/build.gradle.kts` (Compose, Room, Coroutines).
+- [x] Configure `AndroidManifest.xml` with `READ_SMS`, `RECEIVE_SMS`, and receiver/provider declarations.
+- [x] **Unit Tests**:
+  - [x] Build script validation and dependency resolution test (Passed with 100% success).
+- [x] **Commit Hook**:
   - `git commit -m "chore: setup gradle build configuration and manifest"`
 
 ### Subphase 1.2: App Theme & Core Foundation

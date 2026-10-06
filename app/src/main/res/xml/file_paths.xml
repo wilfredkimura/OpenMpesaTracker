@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+  This configuration defines which local storage directories our app is allowed to share.
+  We map the app internal cache folder subpath 'mpesa_reports/' to allow exporting CSV/PDF files 
+  without exposing sensitive private database files or requiring full storage permissions.
+-->
+<paths>
+    <cache-path
+        name="mpesa_reports"
+        path="mpesa_reports/" />
+</paths>
