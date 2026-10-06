@@ -17,11 +17,11 @@ This roadmap tracks all implementation phases, subphases, testing requirements, 
   - `git commit -m "chore: setup gradle build configuration and manifest"`
 
 ### Subphase 1.2: App Theme & Core Foundation
-- [ ] Create Material 3 theme (`Color.kt`, `Theme.kt`, `Type.kt`).
-- [ ] Create simple `AppContainer` for lightweight manual dependency injection.
-- [ ] **Unit Tests**:
-  - [ ] App container and configuration sanity unit tests.
-- [ ] **Commit Hook**:
+- [x] Create Material 3 theme (`Color.kt`, `Theme.kt`, `Type.kt`).
+- [x] Create simple `AppContainer` for lightweight manual dependency injection.
+- [x] **Unit Tests**:
+  - [x] App container and configuration sanity unit tests (Passed with 100% success).
+- [x] **Commit Hook**:
   - `git commit -m "feat: setup material 3 design foundation"`
 
 ---
