@@ -53,11 +53,11 @@ This roadmap tracks all implementation phases, subphases, testing requirements, 
 ## Phase 3: Local Persistence Layer (Room Database)
 
 ### Subphase 3.1: Room Database & Type Converters
-- [ ] Define `AppDatabase` with Room database builder.
-- [ ] Implement `Converters` for `TransactionType` and `TransactionDirection`.
-- [ ] **Unit Tests**:
-  - [ ] Type converter serialization and deserialization unit tests.
-- [ ] **Commit Hook**:
+- [x] Define `AppDatabase` with Room database builder.
+- [x] Implement `Converters` for `TransactionType` and `TransactionDirection`.
+- [x] **Unit Tests**:
+  - [x] Type converter serialization and deserialization unit tests (Passed with 100% success).
+- [x] **Commit Hook**:
   - `git commit -m "feat(data): configure room database and type converters"`
 
 ### Subphase 3.2: TransactionDao Implementation
