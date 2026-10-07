@@ -8,9 +8,20 @@ import android.content.Context
  * Provides a clean, centralized way to supply shared objects (like repositories and databases)
  * throughout the app without requiring heavy reflection-based injection frameworks.
  */
+import com.openmpesa.tracker.data.database.AppDatabase
+import com.openmpesa.tracker.data.repository.DefaultTransactionRepository
+import com.openmpesa.tracker.data.repository.TransactionRepository
+
+/**
+ * Dependency container interface.
+ *
+ * Provides a clean, centralized way to supply shared objects (like repositories and databases)
+ * throughout the app without requiring heavy reflection-based injection frameworks.
+ */
 interface AppContainer {
     val applicationContext: Context
     val isOfflineOnly: Boolean
+    val transactionRepository: TransactionRepository
 }
 
 /**
@@ -30,4 +41,12 @@ class DefaultAppContainer(
      * Strict privacy guarantee flag confirming network operations are disabled.
      */
     override val isOfflineOnly: Boolean = true
+
+    /**
+     * Shared singleton instance of the TransactionRepository backed by the Room database.
+     */
+    override val transactionRepository: TransactionRepository by lazy {
+        val database = AppDatabase.getDatabase(applicationContext)
+        DefaultTransactionRepository(database.transactionDao())
+    }
 }
