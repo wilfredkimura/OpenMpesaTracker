@@ -103,14 +103,7 @@ fun DashboardScreen(
                                 .clip(RoundedCornerShape(8.dp))
                                 .background(MaterialTheme.colorScheme.primaryContainer)
                                 .padding(horizontal = 6.dp, vertical = 2.dp)
-                        ) {
-                            Text(
-                                text = "OFFLINE",
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                        }
+                        ) 
                     }
                 },
                 actions = {

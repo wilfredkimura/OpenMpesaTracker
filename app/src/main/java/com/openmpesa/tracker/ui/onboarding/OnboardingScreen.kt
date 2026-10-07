@@ -286,7 +286,7 @@ fun OnboardingScreen(
  * Card explaining the 100% offline, privacy-first nature of this application.
  */
 @Composable
-private fun PrivacyAssuranceCard() {
+/**private fun PrivacyAssuranceCard() {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
@@ -321,6 +321,8 @@ private fun PrivacyAssuranceCard() {
         }
     }
 }
+*/
+
 
 /**
  * Displays the two distinct reasons SMS permissions are needed.
