@@ -18,3 +18,8 @@ captures/
 # OS specific temporary files
 .DS_Store
 Thumbs.db
+
+# Agent workflow and task tracking files
+AGENTS.md
+Agents.md
+task.md
