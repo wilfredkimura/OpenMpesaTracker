@@ -79,6 +79,8 @@ dependencies {
     testImplementation(libs.androidx.room.testing)
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.test.core)
 
     // Android instrumented testing libraries
     androidTestImplementation(libs.androidx.junit)
