@@ -15,6 +15,9 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+import com.openmpesa.tracker.data.repository.CategoryRepository
+import kotlinx.coroutines.flow.flowOf
+
 /**
  * State manager and controller for the Transaction List, Search, and Filter screen.
  *
@@ -23,9 +26,11 @@ import kotlinx.coroutines.launch
  * and budgeting category.
  *
  * @param repository The local Room database transaction repository.
+ * @param categoryRepository Optional repository providing custom categories created in Settings.
  */
 class TransactionListViewModel(
-    private val repository: TransactionRepository
+    private val repository: TransactionRepository,
+    private val categoryRepository: CategoryRepository? = null
 ) : ViewModel() {
 
     private val _searchQuery = MutableStateFlow("")
@@ -33,35 +38,52 @@ class TransactionListViewModel(
     private val _selectedCategory = MutableStateFlow<String?>(null)
     private val _selectedTransaction = MutableStateFlow<MpesaTransactionEntity?>(null)
 
+    private val categoriesStream = categoryRepository?.getCategories()
+        ?: flowOf(CategoryPresets.defaultCategories)
+
+    private data class FilterState(
+        val query: String,
+        val directionFilter: DirectionFilter,
+        val selectedCategory: String?,
+        val selectedTransaction: MpesaTransactionEntity?
+    )
+
+    private val filterStateFlow = combine(
+        _searchQuery,
+        _directionFilter,
+        _selectedCategory,
+        _selectedTransaction
+    ) { query, direction, category, transaction ->
+        FilterState(query, direction, category, transaction)
+    }
+
     /**
      * Reactively emits the complete and filtered list of transactions along with active filters.
      */
     val uiState: StateFlow<TransactionListUiState> = combine(
         repository.getAllTransactions(),
-        _searchQuery,
-        _directionFilter,
-        _selectedCategory,
-        _selectedTransaction
-    ) { allTransactions, query, directionFilter, selectedCategory, selectedTransaction ->
+        categoriesStream,
+        filterStateFlow
+    ) { allTransactions, customCategories, filters ->
         val filtered = filterTransactions(
             transactions = allTransactions,
-            query = query,
-            directionFilter = directionFilter,
-            selectedCategory = selectedCategory
+            query = filters.query,
+            directionFilter = filters.directionFilter,
+            selectedCategory = filters.selectedCategory
         )
 
-        // Combine default category presets with any custom ones in the ledger
-        val customCategories = allTransactions.map { it.category }.distinct()
-        val allCategories = (CategoryPresets.defaultCategories + customCategories).distinct()
+        // Combine default presets and custom repository categories with any found in recorded transactions
+        val existingCategories = allTransactions.map { it.category }.distinct()
+        val allCategories = (customCategories + existingCategories).distinct()
 
         TransactionListUiState(
-            searchQuery = query,
-            directionFilter = directionFilter,
-            selectedCategory = selectedCategory,
+            searchQuery = filters.query,
+            directionFilter = filters.directionFilter,
+            selectedCategory = filters.selectedCategory,
             availableCategories = allCategories,
             allTransactions = allTransactions,
             filteredTransactions = filtered,
-            selectedTransaction = selectedTransaction,
+            selectedTransaction = filters.selectedTransaction,
             isLoading = false
         )
     }.stateIn(
@@ -181,12 +203,16 @@ class TransactionListViewModel(
      * Factory for creating [TransactionListViewModel] with its repository dependency.
      */
     class Factory(
-        private val repository: TransactionRepository
+        private val repository: TransactionRepository,
+        private val categoryRepository: CategoryRepository? = null
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(TransactionListViewModel::class.java)) {
-                return TransactionListViewModel(repository = repository) as T
+                return TransactionListViewModel(
+                    repository = repository,
+                    categoryRepository = categoryRepository
+                ) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }

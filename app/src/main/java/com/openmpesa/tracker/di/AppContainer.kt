@@ -9,6 +9,8 @@ import android.content.Context
  * throughout the app without requiring heavy reflection-based injection frameworks.
  */
 import com.openmpesa.tracker.data.database.AppDatabase
+import com.openmpesa.tracker.data.repository.CategoryRepository
+import com.openmpesa.tracker.data.repository.DefaultCategoryRepository
 import com.openmpesa.tracker.data.repository.DefaultTransactionRepository
 import com.openmpesa.tracker.data.repository.TransactionRepository
 
@@ -22,6 +24,7 @@ interface AppContainer {
     val applicationContext: Context
     val isOfflineOnly: Boolean
     val transactionRepository: TransactionRepository
+    val categoryRepository: CategoryRepository
 }
 
 /**
@@ -48,5 +51,13 @@ class DefaultAppContainer(
     override val transactionRepository: TransactionRepository by lazy {
         val database = AppDatabase.getDatabase(applicationContext)
         DefaultTransactionRepository(database.transactionDao())
+    }
+
+    /**
+     * Shared singleton instance of the CategoryRepository for managing custom spending categories.
+     */
+    override val categoryRepository: CategoryRepository by lazy {
+        val prefs = applicationContext.getSharedPreferences("category_preferences", Context.MODE_PRIVATE)
+        DefaultCategoryRepository(prefs)
     }
 }

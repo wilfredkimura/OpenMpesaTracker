@@ -28,6 +28,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FileUpload
 import androidx.compose.material.icons.filled.Receipt
 import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -73,6 +74,7 @@ import com.openmpesa.tracker.ui.theme.MpesaGreen
  * @param viewModel State manager supplying aggregated metrics and transaction streams.
  * @param onNavigateToAllTransactions Callback when the user taps "See All" transactions.
  * @param onNavigateToExport Callback when the user taps the Export button.
+ * @param onNavigateToSettings Callback when the user taps the Settings button.
  * @param onTransactionClick Callback when the user taps a specific transaction to view details.
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -81,6 +83,7 @@ fun DashboardScreen(
     viewModel: DashboardViewModel,
     onNavigateToAllTransactions: () -> Unit,
     onNavigateToExport: () -> Unit,
+    onNavigateToSettings: () -> Unit = {},
     onTransactionClick: (MpesaTransactionEntity) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -97,16 +100,17 @@ fun DashboardScreen(
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.titleLarge
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(8.dp))
-                                .background(MaterialTheme.colorScheme.primaryContainer)
-                                .padding(horizontal = 6.dp, vertical = 2.dp)
-                        ) 
                     }
                 },
                 actions = {
+                    // Category settings button (just beside the sync button)
+                    IconButton(onClick = onNavigateToSettings) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Category Settings"
+                        )
+                    }
+
                     // Sync SMS button
                     IconButton(
                         onClick = { viewModel.syncSmsInbox() },

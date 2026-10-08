@@ -24,6 +24,8 @@ import com.openmpesa.tracker.ui.export.ExportBottomSheet
 import com.openmpesa.tracker.ui.export.ExportViewModel
 import com.openmpesa.tracker.ui.onboarding.OnboardingScreen
 import com.openmpesa.tracker.ui.onboarding.OnboardingViewModel
+import com.openmpesa.tracker.ui.settings.SettingScreen
+import com.openmpesa.tracker.ui.settings.SettingViewModel
 import com.openmpesa.tracker.ui.theme.OpenMpesaTheme
 import com.openmpesa.tracker.ui.transactions.TransactionListScreen
 import com.openmpesa.tracker.ui.transactions.TransactionListViewModel
@@ -39,7 +41,10 @@ enum class AppScreen {
     DASHBOARD,
 
     /** Searchable and filterable full transaction ledger with personal memo editing */
-    TRANSACTIONS
+    TRANSACTIONS,
+
+    /** Category settings screen for managing custom budgeting categories */
+    SETTINGS
 }
 
 /**
@@ -118,13 +123,20 @@ private fun AppNavigation(
 
     val transactionListViewModel: TransactionListViewModel = viewModel(
         factory = TransactionListViewModel.Factory(
-            repository = container.transactionRepository
+            repository = container.transactionRepository,
+            categoryRepository = container.categoryRepository
         )
     )
 
     val exportViewModel: ExportViewModel = viewModel(
         factory = ExportViewModel.Factory(
             repository = container.transactionRepository
+        )
+    )
+
+    val settingViewModel: SettingViewModel = viewModel(
+        factory = SettingViewModel.Factory(
+            repository = container.categoryRepository
         )
     )
 
@@ -143,8 +155,8 @@ private fun AppNavigation(
     var currentScreen by remember { mutableStateOf(initialScreen) }
     var showExportSheet by remember { mutableStateOf(false) }
 
-    // Intercept back button when viewing Transactions to navigate back to Dashboard
-    BackHandler(enabled = currentScreen == AppScreen.TRANSACTIONS) {
+    // Intercept back button when viewing Transactions or Settings to navigate back to Dashboard
+    BackHandler(enabled = currentScreen == AppScreen.TRANSACTIONS || currentScreen == AppScreen.SETTINGS) {
         currentScreen = AppScreen.DASHBOARD
     }
 
@@ -167,6 +179,9 @@ private fun AppNavigation(
                 onNavigateToExport = {
                     showExportSheet = true
                 },
+                onNavigateToSettings = {
+                    currentScreen = AppScreen.SETTINGS
+                },
                 onTransactionClick = { tx ->
                     transactionListViewModel.selectTransaction(tx)
                     currentScreen = AppScreen.TRANSACTIONS
@@ -177,6 +192,15 @@ private fun AppNavigation(
         AppScreen.TRANSACTIONS -> {
             TransactionListScreen(
                 viewModel = transactionListViewModel,
+                onNavigateBack = {
+                    currentScreen = AppScreen.DASHBOARD
+                }
+            )
+        }
+
+        AppScreen.SETTINGS -> {
+            SettingScreen(
+                viewModel = settingViewModel,
                 onNavigateBack = {
                     currentScreen = AppScreen.DASHBOARD
                 }
