@@ -286,7 +286,7 @@ fun OnboardingScreen(
  * Card explaining the 100% offline, privacy-first nature of this application.
  */
 @Composable
-/**private fun PrivacyAssuranceCard() {
+private fun PrivacyAssuranceCard() {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
@@ -304,7 +304,7 @@ fun OnboardingScreen(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "100% Offline & Private Guarantee",
+                    text = "100% Offline & Private",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -314,14 +314,13 @@ fun OnboardingScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "This application does not have internet access. Your messages, financial history, and contacts never leave your phone. All parsing is done locally in your device's memory.",
+                text = "This app works completely offline without using the internet. Your messages and financial records stay safe on your phone at all times.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
 }
-*/
 
 
 /**
