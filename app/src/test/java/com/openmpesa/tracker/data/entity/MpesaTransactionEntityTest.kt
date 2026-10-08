@@ -31,7 +31,7 @@ class MpesaTransactionEntityTest {
         assertNull(entity.phoneNumber)
         assertNull(entity.balance)
         assertNull(entity.transactionFee)
-        assertEquals("Uncategorized", entity.category)
+        assertEquals(com.openmpesa.tracker.data.model.CategoryPresets.PERSONAL, entity.category)
         assertEquals("", entity.notes)
     }
 

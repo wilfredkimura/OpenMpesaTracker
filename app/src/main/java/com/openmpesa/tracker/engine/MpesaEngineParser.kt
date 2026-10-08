@@ -222,6 +222,8 @@ object MpesaEngineParser {
         val balance = extractBalance(smsBody)
         val fee = extractCost(smsBody)
 
+        val category = com.openmpesa.tracker.data.model.CategoryPresets.defaultCategoryForType(type)
+
         return MpesaTransactionEntity(
             code = code.uppercase(),
             amount = amount,
@@ -233,7 +235,8 @@ object MpesaEngineParser {
             balance = balance,
             transactionFee = fee,
             timestamp = smsTimestamp,
-            rawMessage = smsBody
+            rawMessage = smsBody,
+            category = category
         )
     }
 

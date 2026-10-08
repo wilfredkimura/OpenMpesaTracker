@@ -2,6 +2,7 @@ package com.openmpesa.tracker.ui.transactions
 
 import com.openmpesa.tracker.data.entity.MpesaTransactionEntity
 import com.openmpesa.tracker.data.entity.TransactionDirection
+import com.openmpesa.tracker.data.model.CategoryPresets
 
 /**
  * Filter options for cash flow direction in the transaction list screen.
@@ -15,24 +16,6 @@ enum class DirectionFilter(val displayName: String) {
 
     /** Show only outbound transactions (money sent/spent) */
     OUTBOUND("Money Out")
-}
-
-/**
- * Common category presets for Kenyan M-Pesa expense tracking.
- */
-object CategoryPresets {
-    val defaultCategories = listOf(
-        "Utilities & Bills",
-        "Shopping",
-        "Food & Dining",
-        "Transport",
-        "Transfer / Family",
-        "Business",
-        "Entertainment",
-        "Healthcare",
-        "Education",
-        "Uncategorized"
-    )
 }
 
 /**

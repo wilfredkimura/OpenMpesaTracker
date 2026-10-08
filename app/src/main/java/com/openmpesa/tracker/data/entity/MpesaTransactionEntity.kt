@@ -97,10 +97,10 @@ data class MpesaTransactionEntity(
     val rawMessage: String,
 
     /**
-     * User-defined category for budgeting (defaults to "Uncategorized").
+     * User-assigned category for budgeting (defaults to "Personal").
      */
     @ColumnInfo(name = "category")
-    val category: String = "Uncategorized",
+    val category: String = com.openmpesa.tracker.data.model.CategoryPresets.PERSONAL,
 
     /**
      * Optional personal notes or memos attached by the user.
