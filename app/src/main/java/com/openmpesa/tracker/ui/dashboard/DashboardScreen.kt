@@ -206,11 +206,11 @@ fun DashboardScreen(
                 )
             }
 
-            // Income, Expenses, and Fees Metrics Grid
+            // Inbound, Outbound, and Fees Metrics Grid
             item {
                 MetricsSummaryRow(
-                    income = uiState.totalIncome,
-                    expenses = uiState.totalExpenses,
+                    inbound = uiState.totalInbound,
+                    outbound = uiState.totalOutbound,
                     fees = uiState.totalFees
                 )
             }
@@ -377,33 +377,33 @@ private fun HeroBalanceCard(
 }
 
 /**
- * Row displaying Income, Expense, and Fees metric cards side by side.
+ * Row displaying Inbound, Outbound, and Fees metric cards side by side.
  */
 @Composable
 private fun MetricsSummaryRow(
-    income: Double,
-    expenses: Double,
+    inbound: Double,
+    outbound: Double,
     fees: Double
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        // Income card
+        // Inbound card
         MetricMiniCard(
             modifier = Modifier.weight(1f),
-            title = "Income",
-            amount = DashboardFormatter.formatKsh(income),
-            icon = Icons.Default.ArrowDownward,
+            title = "Inbound",
+            amount = DashboardFormatter.formatKsh(inbound),
+            icon = Icons.AutoMirrored.Filled.CallReceived,
             accentColor = IncomeGreen
         )
 
-        // Expenses card
+        // Outbound card
         MetricMiniCard(
             modifier = Modifier.weight(1f),
-            title = "Spent",
-            amount = DashboardFormatter.formatKsh(expenses),
-            icon = Icons.Default.ArrowUpward,
+            title = "Outbound",
+            amount = DashboardFormatter.formatKsh(outbound),
+            icon = Icons.AutoMirrored.Filled.CallMade,
             accentColor = ExpenseRed
         )
 

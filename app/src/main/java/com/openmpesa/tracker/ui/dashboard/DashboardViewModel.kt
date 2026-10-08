@@ -131,8 +131,8 @@ class DashboardViewModel(
             isSyncing: Boolean,
             syncMessage: String?
         ): DashboardUiState {
-            var totalIncome = 0.0
-            var totalExpenses = 0.0
+            var totalInbound = 0.0
+            var totalOutbound = 0.0
             var totalFees = 0.0
 
             val categorySpendingMap = mutableMapOf<String, Pair<Double, Int>>()
@@ -140,10 +140,10 @@ class DashboardViewModel(
             for (tx in transactions) {
                 when (tx.direction) {
                     TransactionDirection.INBOUND -> {
-                        totalIncome += tx.amount
+                        totalInbound += tx.amount
                     }
                     TransactionDirection.OUTBOUND -> {
-                        totalExpenses += tx.amount
+                        totalOutbound += tx.amount
                         val current = categorySpendingMap.getOrDefault(tx.category, Pair(0.0, 0))
                         categorySpendingMap[tx.category] = Pair(
                             current.first + tx.amount,
@@ -158,12 +158,12 @@ class DashboardViewModel(
                 }
             }
 
-            // Calculate percentage share for each category based on total expenses
+            // Calculate percentage share for each category based on total outbound spending
             val categoryBreakdown = categorySpendingMap.map { (cat, data) ->
                 val amount = data.first
                 val count = data.second
-                val percentage = if (totalExpenses > 0.0) {
-                    ((amount / totalExpenses) * 100.0).toFloat()
+                val percentage = if (totalOutbound > 0.0) {
+                    ((amount / totalOutbound) * 100.0).toFloat()
                 } else {
                     0.0f
                 }
@@ -184,10 +184,12 @@ class DashboardViewModel(
             return DashboardUiState(
                 isLoading = false,
                 selectedPeriod = period,
-                totalIncome = totalIncome,
-                totalExpenses = totalExpenses,
+                totalInbound = totalInbound,
+                totalOutbound = totalOutbound,
+                totalIncome = totalInbound,
+                totalExpenses = totalOutbound,
                 totalFees = totalFees,
-                netCashFlow = totalIncome - totalExpenses,
+                netCashFlow = totalInbound - totalOutbound,
                 latestBalance = latestBalance,
                 categoryBreakdown = categoryBreakdown,
                 recentTransactions = recentPreview,

@@ -178,6 +178,8 @@ class DashboardViewModelTest {
             syncMessage = null
         )
 
+        assertEquals(5000.0, state.totalInbound, 0.001)
+        assertEquals(3000.0, state.totalOutbound, 0.001)
         assertEquals(5000.0, state.totalIncome, 0.001)
         assertEquals(3000.0, state.totalExpenses, 0.001)
         assertEquals(23.0, state.totalFees, 0.001)
@@ -275,5 +277,103 @@ class DashboardViewModelTest {
         viewModel.dismissSyncMessage()
         testDispatcher.scheduler.advanceUntilIdle()
         assertNull(viewModel.uiState.value.syncMessage)
+    }
+
+    @Test
+    fun calculateUiState_inboundAndOutboundMoniesWithNewCategories() {
+        // Create transactions using the verified new category standards
+        val transactions = listOf(
+            // Inbound: Send Money received
+            MpesaTransactionEntity(
+                code = "TXIN01",
+                amount = 4000.0,
+                party = "JOHN DOE",
+                phoneNumber = "0722***111",
+                timestamp = 1000L,
+                type = TransactionType.SEND_MONEY_INBOUND,
+                direction = TransactionDirection.INBOUND,
+                category = "Personal",
+                rawMessage = "Received Ksh4000"
+            ),
+            // Outbound: Paybill (Utilities/Bills/Fees)
+            MpesaTransactionEntity(
+                code = "TXOUT01",
+                amount = 500.0,
+                party = "KPLC PREPAID",
+                accountNumber = "998877",
+                timestamp = 2000L,
+                type = TransactionType.PAYBILL,
+                direction = TransactionDirection.OUTBOUND,
+                transactionFee = 10.0,
+                category = "Utilities/Bills/Fees",
+                rawMessage = "Paid Ksh500"
+            ),
+            // Outbound: Buy Goods / Till (Utilities/Bills/Fees)
+            MpesaTransactionEntity(
+                code = "TXOUT02",
+                amount = 1500.0,
+                party = "NAIVAS",
+                timestamp = 3000L,
+                type = TransactionType.BUY_GOODS,
+                direction = TransactionDirection.OUTBOUND,
+                category = "Utilities/Bills/Fees",
+                rawMessage = "Paid Ksh1500"
+            ),
+            // Outbound: Pochi La Biashara (Utilities/Bills/Fees)
+            MpesaTransactionEntity(
+                code = "TXOUT03",
+                amount = 300.0,
+                party = "ERICK OPEL",
+                timestamp = 4000L,
+                type = TransactionType.POCHI_LA_BIASHARA,
+                direction = TransactionDirection.OUTBOUND,
+                category = "Utilities/Bills/Fees",
+                rawMessage = "Paid Ksh300"
+            ),
+            // Outbound: Send Money Outbound (Personal)
+            MpesaTransactionEntity(
+                code = "TXOUT04",
+                amount = 1000.0,
+                party = "ALICE WANGUI",
+                phoneNumber = "0712345678",
+                timestamp = 5000L,
+                type = TransactionType.SEND_MONEY_OUTBOUND,
+                direction = TransactionDirection.OUTBOUND,
+                transactionFee = 15.0,
+                category = "Personal",
+                rawMessage = "Sent Ksh1000"
+            )
+        )
+
+        val state = DashboardViewModel.calculateUiState(
+            period = DashboardPeriod.ALL_TIME,
+            transactions = transactions,
+            allTransactions = transactions,
+            isSyncing = false,
+            syncMessage = null
+        )
+
+        // Verify Inbound & Outbound monies
+        assertEquals(4000.0, state.totalInbound, 0.001)
+        // 500 + 1500 + 300 + 1000 = 3300.0
+        assertEquals(3300.0, state.totalOutbound, 0.001)
+        // 10 + 15 = 25.0
+        assertEquals(25.0, state.totalFees, 0.001)
+        // 4000 - 3300 = 700.0
+        assertEquals(700.0, state.netCashFlow, 0.001)
+
+        // Verify category breakdown
+        assertEquals(2, state.categoryBreakdown.size)
+        val utilitiesGroup = state.categoryBreakdown.first { it.category == "Utilities/Bills/Fees" }
+        assertEquals(2300.0, utilitiesGroup.totalAmount, 0.001)
+        assertEquals(3, utilitiesGroup.transactionCount)
+        // 2300 / 3300 = 69.69%
+        assertEquals(69.69f, utilitiesGroup.percentage, 0.1f)
+
+        val personalGroup = state.categoryBreakdown.first { it.category == "Personal" }
+        assertEquals(1000.0, personalGroup.totalAmount, 0.001)
+        assertEquals(1, personalGroup.transactionCount)
+        // 1000 / 3300 = 30.30%
+        assertEquals(30.30f, personalGroup.percentage, 0.1f)
     }
 }

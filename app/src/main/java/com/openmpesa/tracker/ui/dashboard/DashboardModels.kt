@@ -72,6 +72,12 @@ data class DashboardUiState(
     /** Currently selected time period filter */
     val selectedPeriod: DashboardPeriod = DashboardPeriod.THIS_MONTH,
 
+    /** Total money received (inbound monies) during the selected period in Ksh */
+    val totalInbound: Double = 0.0,
+
+    /** Total money spent (outbound monies) during the selected period in Ksh */
+    val totalOutbound: Double = 0.0,
+
     /** Total money received (inbound) during the selected period in Ksh */
     val totalIncome: Double = 0.0,
 
@@ -81,7 +87,7 @@ data class DashboardUiState(
     /** Total M-Pesa transaction fees paid during the selected period in Ksh */
     val totalFees: Double = 0.0,
 
-    /** Net cash flow (Total Income minus Total Expenses) in Ksh */
+    /** Net cash flow (Total Inbound minus Total Outbound) in Ksh */
     val netCashFlow: Double = 0.0,
 
     /** The most recently known wallet balance extracted from M-Pesa SMS receipts */
