@@ -15,7 +15,7 @@ android {
         minSdk = 26
         targetSdk = 35
         versionCode = 1
-        versionName = "1.0.0-alpha"
+        versionName = "0.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -27,7 +27,18 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
+    }
+
+    // Standardize APK output naming to OpenMpesatracker-v<version>.apk
+    applicationVariants.all {
+        val variant = this
+        variant.outputs
+            .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+            .forEach { output ->
+                output.outputFileName = "OpenMpesatracker-v${variant.versionName}.apk"
+            }
     }
 
     compileOptions {
@@ -46,6 +57,15 @@ android {
     testOptions {
         unitTests.isReturnDefaultValues = true
     }
+}
+
+// Gradle task to export the compiled APK into the root export/ directory
+tasks.register<Copy>("exportApk") {
+    description = "Exports the compiled APK with the standardized nomenclature into the export/ directory"
+    dependsOn("assembleDebug")
+    from(layout.buildDirectory.dir("outputs/apk/debug"))
+    include("OpenMpesatracker-v*.apk")
+    into(rootProject.layout.projectDirectory.dir("export"))
 }
 
 dependencies {

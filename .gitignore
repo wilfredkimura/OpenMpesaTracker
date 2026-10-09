@@ -2,6 +2,8 @@
 .gradle/
 build/
 app/build/
+export/
+*.apk
 
 # Local machine configuration (SDK path and custom credentials)
 # Developers will configure their own local.properties pointing to their Android SDK
